@@ -10,7 +10,9 @@
       --primary: #ff2a00;
       --primary-glow: rgba(255, 42, 0, 0.4);
       --secondary: #ffcc99;
-      --tertiary: #4db8ff;
+      --tertiary: #4db8ff; /* Blau für Info/Links */
+      --info: #4db8ff; /* Alias für Bearbeiten-Button */
+      --danger: #ff4d4d; /* Rot für Löschen */
       --bg-dark: #0a0a0a;
       --bg-light: #f0f0f0;
       --text-dark: #ffffff;
@@ -46,7 +48,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-image: 
+      background-image:
         repeating-linear-gradient(30deg, rgba(255, 42, 0, 0.03) 0px, transparent 2px, transparent 50px),
         repeating-linear-gradient(150deg, rgba(255, 42, 0, 0.03) 0px, transparent 2px, transparent 50px),
         radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
@@ -122,6 +124,8 @@
       width: 95%;
       max-width: 1200px;
       margin-bottom: 20px;
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+      gap: 10px;
     }
 
     .status-display {
@@ -131,6 +135,7 @@
       padding: 8px 15px;
       font-size: 0.8rem;
       letter-spacing: 1px;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .main-content {
@@ -152,11 +157,12 @@
       margin-bottom: 20px;
       display: flex;
       justify-content: center;
+      flex-wrap: wrap; /* Allow tabs to wrap */
+      gap: 10px;
     }
 
     .tab {
       padding: 10px 20px;
-      margin: 0 5px;
       background-color: transparent;
       border: 1px solid var(--primary);
       color: var(--primary);
@@ -168,6 +174,7 @@
       letter-spacing: 1px;
       position: relative;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .tab.active {
@@ -187,13 +194,13 @@
       box-shadow: 0 0 15px var(--primary-glow), inset 0 0 20px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(4px);
       flex: 1;
-      display: none;
+      display: none; /* Hidden by default */
       max-height: 70vh;
       overflow-y: auto;
     }
 
     .panel.active {
-      display: block;
+      display: block; /* Show active panel */
     }
 
     .section-title {
@@ -253,6 +260,7 @@
       box-shadow: 0 0 8px var(--primary-glow);
     }
 
+    /* Button Styles */
     .btn {
       padding: 12px 20px;
       background-color: transparent;
@@ -270,6 +278,9 @@
       position: relative;
       overflow: hidden;
       z-index: 1;
+      display: inline-flex; /* Align icon and text */
+      align-items: center;
+      justify-content: center;
     }
 
     .btn.small {
@@ -299,13 +310,18 @@
     }
 
     .btn.danger {
-      border-color: #ff4d4d;
-      color: #ff4d4d;
+      border-color: var(--danger);
+      color: var(--danger);
     }
+    .btn.danger::before { background: var(--danger); }
+    .btn.danger:hover { color: #000; } /* Keep text black on hover */
 
-    .btn.danger::before {
-      background: #ff4d4d;
+    .btn.info { /* Style for Edit button */
+      border-color: var(--info);
+      color: var(--info);
     }
+    .btn.info::before { background: var(--info); }
+    .btn.info:hover { color: #000; }
 
     .controls {
       display: flex;
@@ -315,8 +331,9 @@
       gap: 10px;
     }
 
-    .controls button {
-      flex: 1 0 48%;
+    .controls button, .controls select { /* Apply to select filters too */
+      flex: 1 1 auto; /* Allow shrinking and growing */
+      min-width: 150px; /* Minimum width for filters/buttons */
     }
 
     .notification {
@@ -354,6 +371,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .holo-avatar img {
@@ -402,15 +420,16 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
+      background-image:
         radial-gradient(circle at center, transparent 30%, rgba(255, 42, 0, 0.1) 70%),
         repeating-radial-gradient(circle at center, transparent 0%, transparent 5%, rgba(255, 42, 0, 0.05) 5.5%);
       animation: matrixScan 2s infinite linear;
       z-index: 1;
     }
 
+    /* Theme Toggle Button */
     .theme-toggle {
-      position: absolute;
+      position: fixed; /* Fixed position */
       top: 15px;
       right: 15px;
       cursor: pointer;
@@ -424,6 +443,7 @@
       border: 1px solid var(--primary);
       color: var(--primary);
       transition: all 0.3s ease;
+      z-index: 1001; /* Above notification */
     }
 
     .theme-toggle:hover {
@@ -431,6 +451,7 @@
       color: black;
     }
 
+    /* Loading Spinner */
     .loading {
       display: inline-block;
       width: 20px;
@@ -440,6 +461,7 @@
       border-top-color: var(--primary);
       animation: spin 1s ease-in-out infinite;
       margin-right: 10px;
+      vertical-align: middle;
     }
 
     /* Host-Liste */
@@ -457,6 +479,7 @@
       padding: 15px;
       position: relative;
       transition: all 0.3s ease;
+      cursor: pointer; /* Indicate clickable for map focus */
     }
 
     .host-card:hover {
@@ -485,27 +508,13 @@
       border-radius: 10px;
       text-transform: uppercase;
       background: rgba(0, 0, 0, 0.3);
+      white-space: nowrap; /* Prevent status text wrapping */
     }
 
-    .host-status.aktiviert {
-      color: #4caf50;
-      border: 1px solid #4caf50;
-    }
-
-    .host-status.inaktiv {
-      color: #ff9800;
-      border: 1px solid #ff9800;
-    }
-
-    .host-status.diagnostik {
-      color: #2196f3;
-      border: 1px solid #2196f3;
-    }
-
-    .host-status.bulk-apperception {
-      color: #e91e63;
-      border: 1px solid #e91e63;
-    }
+    .host-status.aktiviert { color: #4caf50; border: 1px solid #4caf50; }
+    .host-status.inaktiv { color: #ff9800; border: 1px solid #ff9800; }
+    .host-status.diagnostik { color: #2196f3; border: 1px solid #2196f3; }
+    .host-status.bulk-apperception { color: #e91e63; border: 1px solid #e91e63; }
 
     .host-type {
       font-size: 0.8rem;
@@ -549,6 +558,10 @@
       margin-top: 15px;
       gap: 10px;
     }
+    .host-actions button { /* Ensure buttons within actions don't take full width */
+        width: auto;
+        flex: 1; /* Allow buttons to share space */
+    }
 
     /* Map styles */
     .map-container {
@@ -564,7 +577,7 @@
       width: 100%;
       height: 100%;
       background-color: #1a1a1a;
-      background-image: 
+      background-image:
         radial-gradient(circle at 50% 50%, #2a2a2a 0%, #1a1a1a 100%),
         repeating-linear-gradient(0deg, rgba(255, 42, 0, 0.05) 0px, transparent 1px, transparent 30px);
       position: relative;
@@ -584,6 +597,7 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       overflow: hidden;
+      background-color: rgba(0,0,0,0.3); /* Slight background */
     }
 
     .region:hover {
@@ -620,16 +634,26 @@
       animation: pulse 2s infinite;
     }
 
+    /* Highlight style for focused region */
+    .region.highlighted {
+        border-color: var(--tertiary);
+        box-shadow: 0 0 15px var(--tertiary), inset 0 0 10px rgba(77, 184, 255, 0.3);
+        color: var(--tertiary);
+        transform: scale(1.05); /* Slightly larger */
+        z-index: 11; /* Above other regions */
+    }
+
     .map-tooltip {
       position: absolute;
       display: none;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.9); /* Darker tooltip */
       border: 1px solid var(--primary);
       padding: 10px;
       border-radius: var(--border-radius);
       z-index: 100;
       max-width: 200px;
       font-size: 0.8rem;
+      pointer-events: none; /* Prevent tooltip from blocking clicks */
     }
 
     .map-tooltip h4 {
@@ -686,6 +710,12 @@
 
     .host-select {
       margin-top: 10px;
+      display: flex; /* Use flex for select and button */
+      gap: 10px;
+      align-items: center;
+    }
+    .host-select select {
+        flex-grow: 1; /* Allow select to take available space */
     }
 
     /* Animation keyframes */
@@ -725,7 +755,7 @@
       box-shadow: 0 0 15px rgba(255, 42, 0, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.5);
     }
 
-    body.light input, 
+    body.light input,
     body.light select,
     body.light textarea {
       background: rgba(255, 255, 255, 0.8);
@@ -744,7 +774,7 @@
 
     body.light .park-map {
       background-color: #f2f2f2;
-      background-image: 
+      background-image:
         radial-gradient(circle at 50% 50%, #ffffff 0%, #f2f2f2 100%),
         repeating-linear-gradient(0deg, rgba(255, 42, 0, 0.05) 0px, transparent 1px, transparent 30px);
     }
@@ -752,22 +782,59 @@
     body.light .region {
       color: rgba(0, 0, 0, 0.7);
       border-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(255,255,255,0.3);
     }
+    body.light .region.highlighted {
+        border-color: var(--info);
+        box-shadow: 0 0 15px var(--info), inset 0 0 10px rgba(77, 184, 255, 0.3);
+        color: var(--info);
+    }
+
+    body.light .map-tooltip {
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--text-light);
+        border-color: var(--primary);
+    }
+    body.light .map-tooltip h4 { color: var(--primary); }
+
+    body.light .status-display {
+        background: rgba(255, 255, 255, 0.7);
+        border-color: var(--primary);
+        color: var(--text-light);
+    }
+    body.light .logo { color: var(--primary); }
+    body.light .tab { color: var(--primary); border-color: var(--primary); }
+    body.light .tab.active { background-color: var(--primary); color: var(--bg-light); }
+    body.light .tab:hover:not(.active) { background-color: rgba(255, 42, 0, 0.1); }
+    body.light label { color: var(--text-light); }
+    body.light .host-name { color: #333; }
+    body.light .host-type { color: #0056b3; }
+    body.light .host-assignment { color: #444; }
+    body.light .stat-value { color: #222; }
+    body.light .stat-label { color: #666; }
+    body.light .narrative-title { color: #333; }
+    body.light .narrative-region { color: #0056b3; }
+    body.light .narrative-description { color: #444; }
+
 
     /* Responsive styles */
     @media (max-width: 768px) {
       .header {
         flex-direction: column;
         gap: 10px;
+        align-items: stretch; /* Stretch items */
       }
-      
+      .status-display {
+        text-align: center;
+      }
+
       .panel {
         padding: 15px;
         max-height: 70vh;
       }
 
       .host-list, .narrative-list {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Single column */
       }
 
       .tab {
@@ -778,39 +845,53 @@
       .map-container {
         height: 300px;
       }
+
+      .controls {
+        flex-direction: column; /* Stack controls vertically */
+      }
+      .controls button, .controls select {
+        width: 100%; /* Full width */
+      }
+      .host-actions {
+        flex-direction: column; /* Stack actions vertically */
+      }
+      .host-actions button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="hexagon-bg" id="hexagonBg"></div>
   <div class="logo">Delos Incorporated</div>
-  
+
   <div class="header">
     <div class="status-display">
       <span id="systemDate">2052-06-15</span> | PARK-STATUS: <span id="parkStatus">OPERATIV</span>
     </div>
     <div class="status-display">
-      HOSTS: <span id="hostCount">0</span> | AKTIVE NARRATIVE: <span id="narrativeCount">0</span>
+      HOSTS: <span id="hostCount">0</span> | NARRATIVE: <span id="narrativeCount">0</span>
     </div>
   </div>
-  
+
   <div class="tab-container">
     <button class="tab active" data-panel="createPanel">HOST-SYNTHESE</button>
     <button class="tab" data-panel="managePanel">HOST-MANAGEMENT</button>
     <button class="tab" data-panel="mapPanel">PARK-ÜBERSICHT</button>
     <button class="tab" data-panel="narrativePanel">NARRATIVE</button>
   </div>
-  
+
   <div class="main-content">
-    <!-- Host Creation Panel -->
     <div class="panel active" id="createPanel">
-      <h2 class="section-title">Host-Synthese-Terminal</h2>
-      
+      <h2 class="section-title" id="createPanelTitle">Host-Synthese-Terminal</h2>
+
       <div class="holo-avatar">
         <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjIpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik01MCwyMCBMNTAsODAiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHBhdGggZD0iTTIwLDUwIEw4MCw1MCIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjEiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=" alt="Host Avatar" id="avatarImage">
         <div class="scan-line"></div>
       </div>
-      
+
+      <input type="hidden" id="editingHostId">
+
       <div class="form-group">
         <label for="hostName">Identifikator:</label>
         <input type="text" id="hostName" placeholder="z.B. Dolores Abernathy">
@@ -864,24 +945,24 @@
       </div>
 
       <div class="controls">
-        <button class="btn" id="createButton" onclick="validateAndCreateHost()">Host initialisieren</button>
+        <button class="btn" id="submitHostButton" onclick="validateAndSubmitHost()">Host initialisieren</button>
+        <button class="btn danger" id="cancelEditButton" onclick="cancelEdit()" style="display: none;">Abbrechen</button>
       </div>
     </div>
-    
-    <!-- Host Management Panel -->
+
     <div class="panel" id="managePanel">
       <h2 class="section-title">Host-Management</h2>
-      
+
       <div class="controls">
-        <select id="filterStatus" class="small">
+        <select id="filterStatus" class="small" onchange="applyHostFilter()">
           <option value="all">Alle Status</option>
           <option value="aktiviert">Aktiviert</option>
           <option value="inaktiv">Inaktiv</option>
           <option value="diagnostik">Diagnostik</option>
           <option value="bulk-apperception">Bulk-Apperception</option>
         </select>
-        
-        <select id="filterRegion" class="small">
+
+        <select id="filterRegion" class="small" onchange="applyHostFilter()">
           <option value="all">Alle Regionen</option>
           <option value="Sweetwater">Sweetwater</option>
           <option value="Escalante">Escalante</option>
@@ -889,40 +970,35 @@
           <option value="Las Mudas">Las Mudas</option>
           <option value="Abernathy Ranch">Abernathy Ranch</option>
         </select>
-        
-        <button class="btn small" onclick="applyHostFilter()">Filter anwenden</button>
-      </div>
-      
+
+        </div>
+
       <div class="host-list" id="hostList">
-        <!-- Host cards will be added here dynamically -->
-      </div>
+        </div>
     </div>
-    
-    <!-- Park Map Panel -->
+
     <div class="panel" id="mapPanel">
       <h2 class="section-title">Park-Übersicht</h2>
-      
+
       <div class="map-container">
         <div class="park-map" id="parkMap">
-          <!-- Regions will be added dynamically -->
-        </div>
+          </div>
         <div class="map-tooltip" id="mapTooltip"></div>
       </div>
-      
+
       <div class="controls" style="margin-top: 15px;">
-        <button class="btn" onclick="showHostsInRegion()">Host-Verteilung anzeigen</button>
+        <button class="btn" onclick="initializeMap()">Gesamte Karte anzeigen</button>
       </div>
     </div>
-    
-    <!-- Narrative Panel -->
+
     <div class="panel" id="narrativePanel">
       <h2 class="section-title">Narrative-Management</h2>
-      
+
       <div class="form-group">
         <label for="narrativeTitle">Narrativ-Titel:</label>
         <input type="text" id="narrativeTitle" placeholder="z.B. Der verlorene Schatz">
       </div>
-      
+
       <div class="form-group">
         <label for="narrativeRegion">Region:</label>
         <select id="narrativeRegion">
@@ -933,45 +1009,48 @@
           <option value="Abernathy Ranch">Abernathy Ranch</option>
         </select>
       </div>
-      
+
       <div class="form-group">
         <label for="narrativeDescription">Beschreibung:</label>
         <textarea id="narrativeDescription" placeholder="Beschreiben Sie das Narrativ..."></textarea>
       </div>
-      
+
       <div class="controls">
         <button class="btn" onclick="createNarrative()">Narrativ erstellen</button>
       </div>
-      
+
       <h3 class="section-title" style="margin-top: 30px;">Aktive Narrative</h3>
-      
+
       <div class="narrative-list" id="narrativeList">
-        <!-- Narratives will be added here dynamically -->
-      </div>
+        </div>
     </div>
   </div>
-  
+
   <button class="theme-toggle" onclick="toggleTheme()">
     <span id="themeIcon">☀</span>
   </button>
-  
+
   <div class="notification" id="notification"></div>
-  
+
   <script>
     // State management
     let hosts = [];
     let narratives = [];
-    let currentSort = null;
-    
+    let currentSort = null; // Placeholder for future sorting
+
+    // LocalStorage Keys
+    const HOSTS_STORAGE_KEY = 'delosHostsData';
+    const NARRATIVES_STORAGE_KEY = 'delosNarrativesData';
+
     // Base64 encoded avatar images for different profiles
     const avatarImages = {
-      'MILA': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjIpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik01MCwyMCBMNTAsODAiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHBhdGggZD0iTTIwLDUwIEw4MCw1MCIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjEiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSI1MCIgeT0iNDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZjJhMDAiPk1JTEEiPC90ZXh0Pjwvc3ZnPg==',
-      'GEMINI': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjIpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIzMCIgeTE9IjMwIiB4Mj0iNzAiIHkyPSI3MCIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjEiLz48bGluZSB4MT0iMzAiIHkxPSI3MCIgeDI9IjcwIiB5Mj0iMzAiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNTAiIHk9IjQ1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmYyYTAwIj5HRU1JTkk8L3RleHQ+PC9zdmc+',
-      'LUNA': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjIpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0zMCw1MCBBMjAsMjAgMCAwLDEgNTAsMzAgQTIwLDIwIDAgMCwxIDcwLDUwIEEyMCwyMCAwIDAsMSA1MCw3MCBBMjAsMjAgMCAwLDEgMzAsNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNTAiIHk9IjQ1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmYyYTAwIj5MVU5BPC90ZXh0Pjwvc3ZnPg==',
-      'WYATT': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjMpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0zMCwzMCBMNzAsNzAiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTMwLDcwIEw3MCwzMCIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjIiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1kYXNoYXJyYXk9IjUsMiIvPjx0ZXh0IHg9IjUwIiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmMmEwMCI+V1lBVFQ8L3RleHQ+PC9zdmc+'
+      'MILA': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjIpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik01MCwyMCBMNTAsODAiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHBhdGggZD0iTTIwLDUwIEw4MCw1MCIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjEiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSI1MCIgeT0iNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZjJhMDAiIGZvbnQtc2l6ZT0iMTJweCI+TUlMQTwvdGV4dD48L3N2Zz4=',
+      'GEMINI': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjIpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIzMCIgeTE9IjMwIiB4Mj0iNzAiIHkyPSI3MCIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjEiLz48bGluZSB4MT0iMzAiIHkxPSI3MCIgeDI9IjcwIiB5Mj0iMzAiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNTAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmYyYTAwIiBmb250LXNpemU9IjEycHgiPkdFTUlOSTwvdGV4dD48L3N2Zz4=',
+      'LUNA': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjIpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0zMCw1MCBBMjAsMjAgMCAwLDEgNTAsMzAgQTIwLDIwIDAgMCwxIDcwLDUwIEEyMCwyMCAwIDAsMSA1MCw3MCBBMjAsMjAgMCAwLDEgMzAsNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNTAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmYyYTAwIiBmb250LXNpemU9IjEycHgiPkxVTkE8L3RleHQ+PC9zdmc+',
+      'WYATT': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsNDIsMCwwLjMpIiBzdHJva2U9IiNmZjJhMDAiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0zMCwzMCBMNzAsNzAiIHN0cm9rZT0iI2ZmMmEwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTMwLDcwIEw3MCwzMCIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjIiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYyYTAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1kYXNoYXJyYXk9IjUsMiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmMmEwMCIgZm9udC1zaXplPSIxMnB4Ij5XWUFUPDwv dGV4dD48L3N2Zz4='
     };
-    
-    // Park regions with their coordinates
+
+    // Park regions with their coordinates and descriptions
     const parkRegions = [
       { name: 'Sweetwater', x: 50, y: 50, width: 20, height: 20, description: 'Das zentrale Dorf im Park, Haupttreffpunkt für neue Gäste.' },
       { name: 'Escalante', x: 80, y: 30, width: 15, height: 15, description: 'Verborgene Stadt mit den ältesten Host-Narrativen.' },
@@ -979,30 +1058,62 @@
       { name: 'Las Mudas', x: 75, y: 75, width: 15, height: 15, description: 'Ruhiges Dorf mit einfachen Narrativen.' },
       { name: 'Abernathy Ranch', x: 25, y: 25, width: 15, height: 15, description: 'Familienbetrieb außerhalb von Sweetwater.' }
     ];
-    
+
+    // --- LocalStorage Functions ---
+    function saveData() {
+      try {
+        localStorage.setItem(HOSTS_STORAGE_KEY, JSON.stringify(hosts));
+        localStorage.setItem(NARRATIVES_STORAGE_KEY, JSON.stringify(narratives));
+      } catch (e) {
+        console.error("Fehler beim Speichern der Daten im LocalStorage:", e);
+        showNotification("Fehler: Daten konnten nicht gespeichert werden.");
+      }
+    }
+
+    function loadData() {
+      try {
+        const storedHosts = localStorage.getItem(HOSTS_STORAGE_KEY);
+        const storedNarratives = localStorage.getItem(NARRATIVES_STORAGE_KEY);
+
+        hosts = storedHosts ? JSON.parse(storedHosts) : [];
+        narratives = storedNarratives ? JSON.parse(storedNarratives) : [];
+
+        // Add sample data if storage is empty (optional)
+        if (hosts.length === 0 && narratives.length === 0) {
+          addSampleData();
+        }
+
+      } catch (e) {
+        console.error("Fehler beim Laden der Daten aus dem LocalStorage:", e);
+        showNotification("Fehler: Gespeicherte Daten konnten nicht geladen werden.");
+        hosts = []; // Reset state on error
+        narratives = [];
+        addSampleData(); // Add sample data as fallback
+      }
+    }
+
+    // --- UI & Helper Functions ---
+
     // Generate hexagonal background pattern
     function generateHexagons() {
       const hexContainer = document.getElementById('hexagonBg');
+      if (!hexContainer) return;
       hexContainer.innerHTML = '';
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
-      
+
       const hexWidth = 30;
       const hexHeight = 17.32;
-      const columns = Math.ceil(screenWidth / (hexWidth * 1.5));
-      const rows = Math.ceil(screenHeight / (hexHeight * 2));
-      
+      const columns = Math.ceil(screenWidth / (hexWidth * 1.5)) + 1; // Extra column
+      const rows = Math.ceil(screenHeight / (hexHeight * 2)) + 1; // Extra row
+
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < columns; j++) {
           const hex = document.createElement('div');
           hex.className = 'hexagon';
-          
-          // Offset every other row
           const offset = i % 2 === 0 ? 0 : hexWidth * 0.75;
-          
-          hex.style.left = `${j * hexWidth * 1.5 + offset}px`;
-          hex.style.top = `${i * hexHeight * 2}px`;
-          
+          hex.style.left = `${j * hexWidth * 1.5 + offset - (hexWidth * 0.75)}px`; // Adjust start pos
+          hex.style.top = `${i * hexHeight * 2 - hexHeight}px`; // Adjust start pos
           hexContainer.appendChild(hex);
         }
       }
@@ -1011,87 +1122,23 @@
     // Update system date for immersion
     function updateSystemDate() {
       const now = new Date();
-      // Add 30 years to current date for futuristic feel
-      now.setFullYear(now.getFullYear() + 30);
+      now.setFullYear(now.getFullYear() + 30); // Futuristic feel
       const dateString = now.toISOString().split('T')[0];
-      document.getElementById('systemDate').textContent = dateString;
-    }
-    
-    // Initialize park map
-    function initializeMap() {
-      const mapEl = document.getElementById('parkMap');
-      mapEl.innerHTML = '';
-      
-      parkRegions.forEach(region => {
-        const regionEl = document.createElement('div');
-        regionEl.className = 'region';
-        regionEl.dataset.name = region.name;
-        regionEl.textContent = region.name;
-        
-        regionEl.style.left = `${region.x}%`;
-        regionEl.style.top = `${region.y}%`;
-        regionEl.style.width = `${region.width}%`;
-        regionEl.style.height = `${region.height}%`;
-        
-        // Check if region has hosts
-        const hostsInRegion = hosts.filter(h => h.region === region.name);
-        if (hostsInRegion.length > 0) {
-          regionEl.classList.add('has-hosts');
-        }
-        
-        regionEl.addEventListener('mouseenter', (e) => {
-          const tooltip = document.getElementById('mapTooltip');
-          tooltip.innerHTML = `<h4>${region.name}</h4><p>${region.description}</p>`;
-          
-          const hostsInRegion = hosts.filter(h => h.region === region.name);
-          if (hostsInRegion.length > 0) {
-            tooltip.innerHTML += `<p>Hosts: ${hostsInRegion.length}</p>`;
-          }
-          
-          tooltip.style.display = 'block';
-          tooltip.style.left = `${e.pageX - mapEl.getBoundingClientRect().left + 10}px`;
-          tooltip.style.top = `${e.pageY - mapEl.getBoundingClientRect().top + 10}px`;
-        });
-        
-        regionEl.addEventListener('mousemove', (e) => {
-          const tooltip = document.getElementById('mapTooltip');
-          tooltip.style.left = `${e.pageX - mapEl.getBoundingClientRect().left + 10}px`;
-          tooltip.style.top = `${e.pageY - mapEl.getBoundingClientRect().top + 10}px`;
-        });
-        
-        regionEl.addEventListener('mouseleave', () => {
-          document.getElementById('mapTooltip').style.display = 'none';
-        });
-        
-        regionEl.addEventListener('click', () => {
-          showHostsInRegion(region.name);
-        });
-        
-        mapEl.appendChild(regionEl);
-      });
-    }
-    
-    // Update avatar image based on selected profile
-    function updateAvatarImage() {
-      const profile = document.getElementById("kiProfil").value;
-      const avatarImg = document.getElementById("avatarImage");
-      
-      if (avatarImages[profile]) {
-        avatarImg.src = avatarImages[profile];
-        // Add a quick flicker animation effect
-        avatarImg.style.opacity = "0.3";
-        setTimeout(() => {
-          avatarImg.style.opacity = "0.85";
-        }, 150);
-      }
+      const dateElement = document.getElementById('systemDate');
+      if (dateElement) dateElement.textContent = dateString;
     }
 
     // Show notification
-    function showNotification(message) {
+    function showNotification(message, type = 'info') { // type can be 'info', 'error', 'success'
       const notification = document.getElementById('notification');
+      if (!notification) return;
       notification.textContent = message;
+      // Optional: Add classes based on type for different styling
+      notification.className = 'notification show'; // Reset classes
+      if (type === 'error') notification.style.borderLeftColor = 'var(--danger)';
+      else notification.style.borderLeftColor = 'var(--primary)';
+
       notification.classList.add('show');
-      
       setTimeout(() => {
         notification.classList.remove('show');
       }, 3000);
@@ -1100,133 +1147,359 @@
     // Toggle theme
     function toggleTheme() {
       const themeIcon = document.getElementById('themeIcon');
+      document.body.classList.toggle('light');
       if (document.body.classList.contains('light')) {
-        document.body.classList.remove('light');
-        themeIcon.textContent = '☀';
+        if (themeIcon) themeIcon.textContent = '☾';
       } else {
-        document.body.classList.add('light');
-        themeIcon.textContent = '☾';
+        if (themeIcon) themeIcon.textContent = '☀';
       }
-    }
-    
-    // Host creation with loading animation
-    function validateAndCreateHost() {
-      const nameField = document.getElementById("hostName").value.trim();
-      if (!nameField) {
-        showNotification("Fehler: Identifikator ist erforderlich");
-        return;
-      }
-      
-      // Check for duplicate names
-      if (hosts.some(h => h.identifikator === nameField)) {
-        showNotification("Fehler: Host mit diesem Namen existiert bereits");
-        return;
-      }
-      
-      const createButton = document.getElementById('createButton');
-      const originalText = createButton.textContent;
-      
-      createButton.innerHTML = '<span class="loading"></span> Initialisiere...';
-      createButton.disabled = true;
-      
-      // Simulate processing time
-      setTimeout(() => {
-        createHost();
-        createButton.innerHTML = originalText;
-        createButton.disabled = false;
-        showNotification("Host erfolgreich synthetisiert");
-        
-        // Switch to manage tab
-        switchTab('managePanel');
-      }, 1200);
+      // Note: Theme preference saving could be added to localStorage too
     }
 
-    // Create new host
+    // Update system stats in header
+    function updateSystemStats() {
+      const hostCountEl = document.getElementById('hostCount');
+      const narrativeCountEl = document.getElementById('narrativeCount');
+      if (hostCountEl) hostCountEl.textContent = hosts.length;
+      if (narrativeCountEl) narrativeCountEl.textContent = narratives.length;
+    }
+
+    // Update avatar image based on selected profile in the form
+    function updateAvatarImage() {
+      const profileSelect = document.getElementById("kiProfil");
+      const avatarImg = document.getElementById("avatarImage");
+      if (!profileSelect || !avatarImg) return;
+
+      const profile = profileSelect.value;
+      avatarImg.src = avatarImages[profile] || avatarImages['MILA']; // Default to MILA if not found
+
+      // Flicker effect
+      avatarImg.style.opacity = "0.3";
+      setTimeout(() => { avatarImg.style.opacity = "0.85"; }, 150);
+    }
+
+    // Tab switching
+    function switchTab(panelId) {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.panel === panelId);
+      });
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === panelId);
+      });
+
+      // Reset create form if switching to it while not editing
+      if (panelId === 'createPanel' && !document.getElementById('editingHostId').value) {
+          resetCreateForm();
+      }
+
+      // Initialize map if switching to map panel
+      if (panelId === 'mapPanel') {
+        initializeMap();
+      }
+      // Update lists if switching to manage/narrative panels
+      if (panelId === 'managePanel') {
+          applyHostFilter(); // Update host list with current filters
+      }
+      if (panelId === 'narrativePanel') {
+          updateNarrativeList();
+      }
+    }
+
+    // Reset the host creation/edit form
+    function resetCreateForm() {
+        document.getElementById('editingHostId').value = '';
+        document.getElementById('hostName').value = '';
+        document.getElementById('hostTyp').selectedIndex = 0;
+        document.getElementById('hostStatus').selectedIndex = 0;
+        document.getElementById('kiProfil').selectedIndex = 0;
+        document.getElementById('parkRegion').selectedIndex = 0;
+        document.getElementById('hostTask').value = '';
+        document.getElementById('submitHostButton').textContent = 'Host initialisieren';
+        document.getElementById('createPanelTitle').textContent = 'Host-Synthese-Terminal';
+        document.getElementById('cancelEditButton').style.display = 'none';
+        updateAvatarImage(); // Update avatar to match default profile
+    }
+
+    // Cancel editing mode
+    function cancelEdit() {
+        resetCreateForm();
+        switchTab('managePanel'); // Switch back to management view
+    }
+
+
+    // --- Map Functions ---
+
+    // Initialize park map
+    function initializeMap() {
+      const mapEl = document.getElementById('parkMap');
+      const tooltipEl = document.getElementById('mapTooltip');
+      if (!mapEl || !tooltipEl) return;
+      mapEl.innerHTML = ''; // Clear previous map elements
+
+      parkRegions.forEach(region => {
+        const regionEl = document.createElement('div');
+        regionEl.className = 'region';
+        regionEl.dataset.name = region.name;
+        regionEl.textContent = region.name; // Show name inside region
+
+        regionEl.style.left = `${region.x}%`;
+        regionEl.style.top = `${region.y}%`;
+        regionEl.style.width = `${region.width}%`;
+        regionEl.style.height = `${region.height}%`;
+
+        // Check if region has hosts and add indicator
+        const hostsInRegion = hosts.filter(h => h.region === region.name);
+        if (hostsInRegion.length > 0) {
+          regionEl.classList.add('has-hosts');
+        }
+
+        // Tooltip logic
+        regionEl.addEventListener('mouseenter', (e) => {
+          tooltipEl.innerHTML = `<h4>${region.name}</h4><p>${region.description}</p>`;
+          if (hostsInRegion.length > 0) {
+            tooltipEl.innerHTML += `<p>Hosts: ${hostsInRegion.length}</p>`;
+          }
+          tooltipEl.style.display = 'block';
+        });
+
+        regionEl.addEventListener('mousemove', (e) => {
+          // Position tooltip relative to map container
+          const mapRect = mapEl.getBoundingClientRect();
+          tooltipEl.style.left = `${e.clientX - mapRect.left + 15}px`;
+          tooltipEl.style.top = `${e.clientY - mapRect.top + 15}px`;
+        });
+
+        regionEl.addEventListener('mouseleave', () => {
+          tooltipEl.style.display = 'none';
+        });
+
+        // Click logic: Filter list and switch tab
+        regionEl.addEventListener('click', () => {
+          showHostsInRegion(region.name);
+        });
+
+        mapEl.appendChild(regionEl);
+      });
+    }
+
+    // Highlight a region on the map
+    function focusRegion(regionName) {
+        switchTab('mapPanel'); // Switch to map tab first
+
+        // Use setTimeout to ensure the map is visible before highlighting
+        setTimeout(() => {
+            const mapEl = document.getElementById('parkMap');
+            if (!mapEl) return;
+
+            // Remove previous highlights
+            mapEl.querySelectorAll('.region.highlighted').forEach(el => el.classList.remove('highlighted'));
+
+            const regionEl = mapEl.querySelector(`.region[data-name="${regionName}"]`);
+            if (regionEl) {
+                regionEl.classList.add('highlighted');
+                // Optional: Scroll map to region if map is scrollable/zoomable (more complex)
+
+                // Remove highlight after a delay
+                setTimeout(() => {
+                    regionEl.classList.remove('highlighted');
+                }, 2500); // Highlight for 2.5 seconds
+            }
+        }, 100); // Small delay to allow tab switch
+    }
+
+    // Filter host list based on map region click
+    function showHostsInRegion(regionName) {
+      if (regionName) {
+        document.getElementById('filterRegion').value = regionName;
+        document.getElementById('filterStatus').value = 'all'; // Reset status filter
+        applyHostFilter(); // Update list
+        switchTab('managePanel'); // Switch to management tab
+      } else {
+        // If called without region name, just update map (e.g., "Show All" button)
+        initializeMap();
+      }
+    }
+
+    // --- Host Functions ---
+
+    // Validate and submit host (handles both create and update)
+    function validateAndSubmitHost() {
+      const hostId = document.getElementById('editingHostId').value;
+      const nameField = document.getElementById("hostName").value.trim();
+
+      if (!nameField) {
+        showNotification("Fehler: Identifikator ist erforderlich", 'error');
+        return;
+      }
+
+      // Check for duplicate names only when creating a new host
+      if (!hostId && hosts.some(h => h.identifikator === nameField)) {
+        showNotification("Fehler: Host mit diesem Namen existiert bereits", 'error');
+        return;
+      }
+      // Check for duplicate names when editing (excluding the host being edited)
+      if (hostId && hosts.some(h => h.identifikator === nameField && h.id !== parseInt(hostId))) {
+          showNotification("Fehler: Ein anderer Host hat bereits diesen Namen", 'error');
+          return;
+      }
+
+
+      const submitButton = document.getElementById('submitHostButton');
+      const originalText = hostId ? 'Host aktualisieren' : 'Host initialisieren';
+      submitButton.innerHTML = `<span class="loading"></span> ${hostId ? 'Aktualisiere...' : 'Initialisiere...'}`;
+      submitButton.disabled = true;
+      document.getElementById('cancelEditButton').disabled = true; // Disable cancel during submit
+
+      // Simulate processing time
+      setTimeout(() => {
+        if (hostId) {
+          updateHost(parseInt(hostId));
+        } else {
+          createHost();
+        }
+        submitButton.innerHTML = originalText; // Restore button text AFTER operation
+        submitButton.disabled = false;
+        document.getElementById('cancelEditButton').disabled = false;
+
+        // Reset form and switch tab after operation
+        resetCreateForm();
+        switchTab('managePanel');
+
+      }, 800); // Shorter delay for update/create simulation
+    }
+
+    // Create new host object and add to array
     function createHost() {
       const host = {
-        id: Date.now(),
-        identifikator: document.getElementById("hostName").value,
+        id: Date.now(), // Simple unique ID
+        identifikator: document.getElementById("hostName").value.trim(),
         archetypus: document.getElementById("hostTyp").value,
         bewusstseinsstatus: document.getElementById("hostStatus").value,
         kognitiver_kern: document.getElementById("kiProfil").value,
         region: document.getElementById("parkRegion").value,
-        funktion: document.getElementById("hostTask").value,
+        funktion: document.getElementById("hostTask").value.trim(),
         synthese_datum: new Date().toISOString().split('T')[0],
-        build_seriennummer: `WW-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-        bulk_apperception: Math.floor(Math.random() * 14) + 6,
-        emotionale_tiefe: (Math.random() * 0.4 + 0.6).toFixed(2),
-        narrativ: null
+        build_seriennummer: `WW-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+        bulk_apperception: Math.floor(Math.random() * 15) + 5,
+        emotionale_tiefe: (Math.random() * 0.5 + 0.5).toFixed(2),
+        narrativ: null // Initially no narrative
       };
-      
+
       hosts.push(host);
-      updateAvatarImage();
+      saveData(); // Save after adding
       updateHostList();
       updateSystemStats();
-      
-      // Clear form 
-      document.getElementById("hostName").value = '';
-      document.getElementById("hostTask").value = '';
+      initializeMap(); // Update map indicators
+      showNotification("Host erfolgreich synthetisiert", 'success');
     }
-    
-    // Create a new narrative
-    function createNarrative() {
-      const title = document.getElementById('narrativeTitle').value.trim();
-      const region = document.getElementById('narrativeRegion').value;
-      const description = document.getElementById('narrativeDescription').value.trim();
-      
-      if (!title) {
-        showNotification("Fehler: Narrativ-Titel ist erforderlich");
+
+    // Populate form for editing a host
+    function editHost(hostId) {
+        const host = hosts.find(h => h.id === hostId);
+        if (!host) {
+            showNotification("Fehler: Host nicht gefunden", 'error');
+            return;
+        }
+
+        // Populate form fields
+        document.getElementById('editingHostId').value = host.id;
+        document.getElementById('hostName').value = host.identifikator;
+        document.getElementById('hostTyp').value = host.archetypus;
+        document.getElementById('hostStatus').value = host.bewusstseinsstatus;
+        document.getElementById('kiProfil').value = host.kognitiver_kern;
+        document.getElementById('parkRegion').value = host.region;
+        document.getElementById('hostTask').value = host.funktion;
+
+        // Update button and title for editing mode
+        document.getElementById('submitHostButton').textContent = 'Host aktualisieren';
+        document.getElementById('createPanelTitle').textContent = 'Host bearbeiten';
+        document.getElementById('cancelEditButton').style.display = 'inline-flex'; // Show cancel button
+
+        updateAvatarImage(); // Update avatar based on host's profile
+        switchTab('createPanel'); // Switch to the form panel
+    }
+
+    // Update existing host object in array
+    function updateHost(hostId) {
+        const hostIndex = hosts.findIndex(h => h.id === hostId);
+        if (hostIndex === -1) {
+            showNotification("Fehler: Host zum Aktualisieren nicht gefunden", 'error');
+            return;
+        }
+
+        // Update host data from form
+        hosts[hostIndex] = {
+            ...hosts[hostIndex], // Keep existing properties like ID, build number etc.
+            identifikator: document.getElementById("hostName").value.trim(),
+            archetypus: document.getElementById("hostTyp").value,
+            bewusstseinsstatus: document.getElementById("hostStatus").value,
+            kognitiver_kern: document.getElementById("kiProfil").value,
+            region: document.getElementById("parkRegion").value,
+            funktion: document.getElementById("hostTask").value.trim(),
+            // Optionally update other stats if form fields existed
+        };
+
+        saveData(); // Save after updating
+        updateHostList();
+        initializeMap(); // Update map indicators
+        showNotification("Host erfolgreich aktualisiert", 'success');
+    }
+
+
+    // Delete host
+    function deleteHost(hostId) {
+      // Find host to get name for confirmation message
+      const host = hosts.find(h => h.id === hostId);
+      if (!host) return;
+
+      if (!confirm(`Sind Sie sicher, dass Sie Host "${host.identifikator}" dekommissionieren möchten?`)) {
         return;
       }
-      
-      const narrative = {
-        id: Date.now(),
-        title: title,
-        region: region,
-        description: description,
-        hosts: []
-      };
-      
-      narratives.push(narrative);
-      updateNarrativeList();
+
+      hosts = hosts.filter(h => h.id !== hostId); // Remove host from array
+
+      saveData(); // Save after deleting
+      updateHostList();
       updateSystemStats();
-      
-      document.getElementById('narrativeTitle').value = '';
-      document.getElementById('narrativeDescription').value = '';
-      
-      showNotification("Narrativ erfolgreich erstellt");
+      initializeMap(); // Update map indicators
+
+      showNotification(`Host "${host.identifikator}" wurde dekommissioniert`);
     }
-    
+
     // Update host list display
     function updateHostList(filterStatus = 'all', filterRegion = 'all') {
       const listEl = document.getElementById('hostList');
+      if (!listEl) return;
       listEl.innerHTML = '';
-      
+
       // Apply filters
-      let filteredHosts = [...hosts];
-      
-      if (filterStatus !== 'all') {
-        filteredHosts = filteredHosts.filter(h => h.bewusstseinsstatus === filterStatus);
-      }
-      
-      if (filterRegion !== 'all') {
-        filteredHosts = filteredHosts.filter(h => h.region === filterRegion);
-      }
-      
-      // Show message if no hosts
+      let filteredHosts = hosts.filter(host =>
+          (filterStatus === 'all' || host.bewusstseinsstatus === filterStatus) &&
+          (filterRegion === 'all' || host.region === filterRegion)
+      );
+
+      // Show message if no hosts match filter
       if (filteredHosts.length === 0) {
-        listEl.innerHTML = '<p>Keine Hosts gefunden.</p>';
+        listEl.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Keine Hosts entsprechen den aktuellen Filtern.</p>';
         return;
       }
-      
+
       filteredHosts.forEach(host => {
         const card = document.createElement('div');
         card.className = 'host-card';
         card.dataset.id = host.id;
-        
-        const narrativInfo = host.narrativ ? 
-          narratives.find(n => n.id === host.narrativ) : null;
-        
+        // Add click event to focus map region
+        card.onclick = (event) => {
+            // Prevent triggering if a button inside the card was clicked
+            if (event.target.tagName.toLowerCase() !== 'button') {
+                focusRegion(host.region);
+            }
+        };
+
+
+        const narrativInfo = host.narrativ ? narratives.find(n => n.id === host.narrativ) : null;
+        const integrity = Math.floor(Math.random() * 31) + 70; // Random integrity 70-100%
+
         card.innerHTML = `
           <div class="host-card-header">
             <h3 class="host-name">${host.identifikator}</h3>
@@ -1235,7 +1508,7 @@
           <div class="host-type">${host.archetypus} | ${host.kognitiver_kern}</div>
           <div class="host-assignment">
             <strong>Region:</strong> ${host.region}<br>
-            ${narrativInfo ? `<strong>Narrativ:</strong> ${narrativInfo.title}` : ''}
+            ${narrativInfo ? `<strong>Narrativ:</strong> ${narrativInfo.title}` : '<em>Kein Narrativ zugewiesen</em>'}
           </div>
           <div class="host-stats">
             <div class="host-stat">
@@ -1247,284 +1520,272 @@
               <div class="stat-label">Emot. Tiefe</div>
             </div>
             <div class="host-stat">
-              <div class="stat-value">${Math.floor(Math.random() * 100)}%</div>
+              <div class="stat-value">${integrity}%</div>
               <div class="stat-label">Integrität</div>
             </div>
           </div>
           <div class="host-actions">
-            <button class="btn small" onclick="assignNarrative(${host.id})">Narrativ zuweisen</button>
-            <button class="btn small danger" onclick="deleteHost(${host.id})">Dekommissionieren</button>
+            <button class="btn small info" onclick="event.stopPropagation(); editHost(${host.id})">Bearbeiten</button>
+            <button class="btn small" onclick="event.stopPropagation(); assignNarrative(${host.id})">Narrativ</button>
+            <button class="btn small danger" onclick="event.stopPropagation(); deleteHost(${host.id})">Löschen</button>
           </div>
         `;
-        
+
         listEl.appendChild(card);
       });
     }
-    
+
+    // Apply host filter and update list
+    function applyHostFilter() {
+      const statusFilter = document.getElementById('filterStatus')?.value || 'all';
+      const regionFilter = document.getElementById('filterRegion')?.value || 'all';
+      updateHostList(statusFilter, regionFilter);
+    }
+
+    // --- Narrative Functions ---
+
+    // Create a new narrative
+    function createNarrative() {
+      const titleInput = document.getElementById('narrativeTitle');
+      const regionSelect = document.getElementById('narrativeRegion');
+      const descriptionInput = document.getElementById('narrativeDescription');
+
+      const title = titleInput.value.trim();
+      const region = regionSelect.value;
+      const description = descriptionInput.value.trim();
+
+      if (!title) {
+        showNotification("Fehler: Narrativ-Titel ist erforderlich", 'error');
+        return;
+      }
+
+      const narrative = {
+        id: Date.now(),
+        title: title,
+        region: region,
+        description: description,
+        // hosts array is not needed here, assignment is stored on host object
+      };
+
+      narratives.push(narrative);
+      saveData(); // Save after adding
+      updateNarrativeList();
+      updateSystemStats();
+
+      // Clear form
+      titleInput.value = '';
+      descriptionInput.value = '';
+      regionSelect.selectedIndex = 0;
+
+      showNotification("Narrativ erfolgreich erstellt", 'success');
+    }
+
     // Update narrative list display
     function updateNarrativeList() {
       const listEl = document.getElementById('narrativeList');
+      if (!listEl) return;
       listEl.innerHTML = '';
-      
+
       if (narratives.length === 0) {
-        listEl.innerHTML = '<p>Keine Narrative vorhanden.</p>';
+        listEl.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Keine Narrative vorhanden.</p>';
         return;
       }
-      
+
       narratives.forEach(narrative => {
         const hostsInNarrative = hosts.filter(h => h.narrativ === narrative.id);
-        
+
         const card = document.createElement('div');
         card.className = 'narrative-card';
         card.dataset.id = narrative.id;
-        
+
         card.innerHTML = `
           <h3 class="narrative-title">${narrative.title}</h3>
           <div class="narrative-region">Region: ${narrative.region}</div>
-          <div class="narrative-description">${narrative.description}</div>
+          <div class="narrative-description">${narrative.description || '<em>Keine Beschreibung</em>'}</div>
           <div>Zugewiesene Hosts: ${hostsInNarrative.length}</div>
-          
-          <div class="host-select" style="display: ${hostsInNarrative.length > 0 ? 'block' : 'none'}">
-            <select class="narrative-hosts">
+
+          ${hostsInNarrative.length > 0 ? `
+          <div class="host-select">
+            <select class="narrative-hosts-${narrative.id}" style="width: 100%;">
               ${hostsInNarrative.map(h => `<option value="${h.id}">${h.identifikator}</option>`).join('')}
             </select>
-            <button class="btn small" onclick="viewHost(${narrative.id})">Host anzeigen</button>
-          </div>
-          
+            </div>
+          ` : ''}
+
           <div class="host-actions" style="margin-top: 10px">
             <button class="btn small danger" onclick="deleteNarrative(${narrative.id})">Narrativ löschen</button>
           </div>
         `;
-        
+
         listEl.appendChild(card);
       });
     }
-    
-    // Show hosts in a specific region
-    function showHostsInRegion(regionName) {
-      // If region is specified, filter to that region
-      if (regionName) {
-        document.getElementById('filterRegion').value = regionName;
-        document.getElementById('filterStatus').value = 'all';
-        applyHostFilter();
-        switchTab('managePanel');
-        return;
-      }
-      
-      // Otherwise just update the map with all hosts
-      initializeMap();
-    }
-    
-    // Update system stats in header
-    function updateSystemStats() {
-      document.getElementById('hostCount').textContent = hosts.length;
-      document.getElementById('narrativeCount').textContent = narratives.length;
-    }
-    
-    // Apply host filter and update list
-    function applyHostFilter() {
-      const statusFilter = document.getElementById('filterStatus').value;
-      const regionFilter = document.getElementById('filterRegion').value;
-      updateHostList(statusFilter, regionFilter);
-    }
-    
+
     // Assign narrative to host
     function assignNarrative(hostId) {
       const host = hosts.find(h => h.id === hostId);
       if (!host) return;
-      
+
       if (narratives.length === 0) {
-        showNotification("Kein Narrativ verfügbar. Erstellen Sie zuerst ein Narrativ.");
+        showNotification("Kein Narrativ verfügbar. Erstellen Sie zuerst ein Narrativ.", 'info');
         return;
       }
-      
-      // Create a modal or use an alternative like a prompt for simplicity
-      let narrativeOptions = '';
-      narratives.forEach(n => {
+
+      // Build options for prompt, filtering by host's region initially
+      let narrativeOptions = 'Verfügbare Narrative (gleiche Region):\n';
+      let availableNarratives = narratives.filter(n => n.region === host.region);
+      if (availableNarratives.length === 0) {
+          narrativeOptions = 'Keine Narrative in der Host-Region verfügbar. Alle Narrative:\n';
+          availableNarratives = narratives; // Show all if none in region
+      }
+
+      availableNarratives.forEach(n => {
         narrativeOptions += `${n.id}: ${n.title} (${n.region})\n`;
       });
-      
-      const message = `Verfügbare Narrative:\n${narrativeOptions}\n\nGeben Sie die ID des Narrativs ein:`;
-      const narrativeId = parseInt(prompt(message));
-      
-      if (!narrativeId || isNaN(narrativeId)) return;
-      
-      const narrative = narratives.find(n => n.id === narrativeId);
-      if (!narrative) {
-        showNotification("Ungültige Narrativ-ID");
+      narrativeOptions += '\n0: Narrativ entfernen\n\nGeben Sie die ID des Narrativs ein:';
+
+
+      const input = prompt(narrativeOptions, host.narrativ || ''); // Pre-fill with current narrative ID if exists
+
+      if (input === null) return; // User cancelled prompt
+
+      const narrativeId = parseInt(input);
+
+      if (isNaN(narrativeId)) {
+        showNotification("Ungültige Eingabe.", 'error');
         return;
       }
-      
-      // Check if host is in the same region as the narrative
-      if (host.region !== narrative.region) {
-        const confirmMove = confirm(`Host befindet sich in ${host.region}, aber das Narrativ ist in ${narrative.region}. Host transferieren?`);
-        if (confirmMove) {
-          host.region = narrative.region;
-        } else {
-          return;
-        }
+
+      if (narrativeId === 0) {
+          // Remove narrative assignment
+          host.narrativ = null;
+          showNotification(`Narrativ von Host ${host.identifikator} entfernt.`);
+      } else {
+          const narrative = narratives.find(n => n.id === narrativeId);
+          if (!narrative) {
+            showNotification("Ungültige Narrativ-ID", 'error');
+            return;
+          }
+
+          // Check region compatibility (allow assignment even if different, maybe add warning later)
+          // if (host.region !== narrative.region) {
+          //   showNotification(`Warnung: Host (${host.region}) und Narrativ (${narrative.region}) sind in unterschiedlichen Regionen.`, 'info');
+          // }
+
+          host.narrativ = narrative.id;
+          showNotification(`Host ${host.identifikator} wurde dem Narrativ "${narrative.title}" zugewiesen`, 'success');
       }
-      
-      // Assign narrative to host
-      host.narrativ = narrative.id;
-      
-      updateHostList();
-      updateNarrativeList();
-      initializeMap();
-      
-      showNotification(`Host ${host.identifikator} wurde dem Narrativ "${narrative.title}" zugewiesen`);
+
+
+      saveData(); // Save changes
+      updateHostList(); // Update display
+      updateNarrativeList(); // Update narrative cards if needed
+      initializeMap(); // Update map indicators
+
     }
-    
-    // View host details (simplified, could be expanded)
-    function viewHost(narrativeId) {
-      const narrativeCard = document.querySelector(`.narrative-card[data-id="${narrativeId}"]`);
-      if (!narrativeCard) return;
-      
-      const select = narrativeCard.querySelector('.narrative-hosts');
-      if (!select) return;
-      
-      const hostId = parseInt(select.value);
-      const host = hosts.find(h => h.id === hostId);
-      
-      if (host) {
-        alert(`Host-Details: ${JSON.stringify(host, null, 2)}`);
-      }
-    }
-    
-    // Delete host
-    function deleteHost(hostId) {
-      if (!confirm("Sind Sie sicher, dass Sie diesen Host dekommissionieren möchten?")) {
-        return;
-      }
-      
-      const hostIndex = hosts.findIndex(h => h.id === hostId);
-      if (hostIndex !== -1) {
-        const host = hosts[hostIndex];
-        hosts.splice(hostIndex, 1);
-        
-        updateHostList();
-        updateSystemStats();
-        initializeMap();
-        
-        showNotification(`Host ${host.identifikator} wurde dekommissioniert`);
-      }
-    }
-    
+
     // Delete narrative
     function deleteNarrative(narrativeId) {
-      if (!confirm("Sind Sie sicher, dass Sie dieses Narrativ löschen möchten?")) {
+      const narrative = narratives.find(n => n.id === narrativeId);
+      if (!narrative) return;
+
+      if (!confirm(`Sind Sie sicher, dass Sie das Narrativ "${narrative.title}" löschen möchten? Zugewiesene Hosts verlieren ihre Zuweisung.`)) {
         return;
       }
-      
-      const narrativeIndex = narratives.findIndex(n => n.id === narrativeId);
-      if (narrativeIndex !== -1) {
-        const narrative = narratives[narrativeIndex];
-        
-        // Remove narrative reference from hosts
-        hosts.forEach(host => {
-          if (host.narrativ === narrativeId) {
-            host.narrativ = null;
-          }
-        });
-        
-        narratives.splice(narrativeIndex, 1);
-        
-        updateHostList();
-        updateNarrativeList();
-        updateSystemStats();
-        
-        showNotification(`Narrativ "${narrative.title}" wurde gelöscht`);
-      }
-    }
-    
-    // Tab switching
-    function switchTab(panelId) {
-      // Update tabs
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.dataset.panel === panelId) {
-          tab.classList.add('active');
+
+      // Remove narrative reference from hosts
+      hosts.forEach(host => {
+        if (host.narrativ === narrativeId) {
+          host.narrativ = null;
         }
       });
-      
-      // Update panels
-      document.querySelectorAll('.panel').forEach(panel => {
-        panel.classList.remove('active');
-      });
-      
-      document.getElementById(panelId).classList.add('active');
-      
-      // Specific initialization for panels
-      if (panelId === 'mapPanel') {
-        initializeMap();
-      }
-    }
-    
-    // Event listeners for tab buttons
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        switchTab(tab.dataset.panel);
-      });
-    });
-    
-    // Avatar profile change
-    document.getElementById('kiProfil').addEventListener('change', () => {
-      updateAvatarImage();
-    });
 
-    // Initialize app
-    window.addEventListener('load', () => {
+      narratives = narratives.filter(n => n.id !== narrativeId); // Remove narrative
+
+      saveData(); // Save changes
+      updateHostList(); // Update host cards
+      updateNarrativeList(); // Update narrative list
+      updateSystemStats();
+
+      showNotification(`Narrativ "${narrative.title}" wurde gelöscht`);
+    }
+
+    // --- Initialization ---
+
+    // Add sample data if needed
+    function addSampleData() {
+        // Add a sample host if hosts array is empty
+        if (hosts.length === 0) {
+            hosts.push({
+                id: 1000, identifikator: "Dolores Abernathy", archetypus: "Reverie", bewusstseinsstatus: "aktiviert",
+                kognitiver_kern: "WYATT", region: "Sweetwater", funktion: "Tochter eines Ranchers, erste Generation Host",
+                synthese_datum: "2022-03-15", build_seriennummer: "WW-AB1D0L", bulk_apperception: 18,
+                emotionale_tiefe: "0.92", narrativ: null
+            });
+             hosts.push({
+                id: 1001, identifikator: "Teddy Flood", archetypus: "Wächter", bewusstseinsstatus: "aktiviert",
+                kognitiver_kern: "MILA", region: "Sweetwater", funktion: "Revolverheld mit tragischer Vergangenheit",
+                synthese_datum: "2023-01-20", build_seriennummer: "WW-TDYF00", bulk_apperception: 15,
+                emotionale_tiefe: "0.85", narrativ: null
+            });
+        }
+        // Add a sample narrative if narratives array is empty
+        if (narratives.length === 0) {
+            narratives.push({
+                id: 2000, title: "Der Schatz von Pariah", region: "Pariah",
+                description: "Gäste suchen nach einem verborgenen Schatz und decken dabei Geheimnisse der Stadt auf.",
+            });
+             narratives.push({
+                id: 2001, title: "Die Ankunft des Fremden", region: "Sweetwater",
+                description: "Ein mysteriöser Fremder kommt in die Stadt und löst eine Kette von Ereignissen aus.",
+            });
+        }
+    }
+
+
+    // Initialize app on load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData(); // Load data from localStorage first
       generateHexagons();
       updateSystemDate();
       updateSystemStats();
       initializeMap();
-      
-      // Check system preference for dark/light mode
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      updateHostList(); // Initial population of host list
+      updateNarrativeList(); // Initial population of narrative list
+
+      // Set initial theme based on system preference
+      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      if (prefersLight) {
         document.body.classList.add('light');
-        document.getElementById('themeIcon').textContent = '☾';
+        const themeIcon = document.getElementById('themeIcon');
+        if(themeIcon) themeIcon.textContent = '☾';
       }
-      
-      // Add sample data for demo
-      // Add a sample host
-      hosts.push({
-        id: 1000,
-        identifikator: "Dolores Abernathy",
-        archetypus: "Reverie",
-        bewusstseinsstatus: "aktiviert",
-        kognitiver_kern: "WYATT",
-        region: "Sweetwater",
-        funktion: "Tochter eines Ranchers, erste Generation Host",
-        synthese_datum: "2022-03-15",
-        build_seriennummer: "WW-AB1D0L",
-        bulk_apperception: 18,
-        emotionale_tiefe: "0.92",
-        narrativ: null
+
+      // Add event listeners
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.dataset.panel));
       });
-      
-      // Add a sample narrative
-      narratives.push({
-        id: 2000,
-        title: "Der Schatz von Pariah",
-        region: "Pariah",
-        description: "Gäste suchen nach einem verborgenen Schatz in den Außenbezirken von Pariah und decken dabei Geheimnisse der Stadt auf.",
-        hosts: []
-      });
-      
-      updateHostList();
-      updateNarrativeList();
-      updateSystemStats();
+      const kiProfilSelect = document.getElementById('kiProfil');
+      if (kiProfilSelect) {
+          kiProfilSelect.addEventListener('change', updateAvatarImage);
+      }
+
+      // Initial avatar update
+      updateAvatarImage();
     });
-    
+
+    // Regenerate hexagons on resize
     window.addEventListener('resize', generateHexagons);
-    
+
+    // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', event => {
+      const themeIcon = document.getElementById('themeIcon');
       if (event.matches) {
         document.body.classList.add('light');
-        document.getElementById('themeIcon').textContent = '☾';
+        if(themeIcon) themeIcon.textContent = '☾';
       } else {
         document.body.classList.remove('light');
-        document.getElementById('themeIcon').textContent = '☀';
+        if(themeIcon) themeIcon.textContent = '☀';
       }
     });
   </script>
